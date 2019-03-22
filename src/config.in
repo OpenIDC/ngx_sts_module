@@ -1,0 +1,14 @@
+ngx_addon_name=ngx_sts_module
+
+if test -n "$ngx_module_link"; then
+    ngx_module_type=HTTP
+    ngx_module_name=ngx_sts_module
+    ngx_module_incs="@XML_CFLAGS@ @OAUTH2_CFLAGS@ $ngx_addon_dir/liboauth2-sts/include"
+    ngx_module_srcs="$ngx_addon_dir/ngx_sts_module.c $ngx_addon_dir/liboauth2-sts/src/sts.c $ngx_addon_dir/liboauth2-sts/src/wstrust.c $ngx_addon_dir/liboauth2-sts/src/ropc.c $ngx_addon_dir/liboauth2-sts/src/otx.c"
+
+    . auto/module
+else
+    HTTP_MODULES="$HTTP_MODULES ngx_sts_module"
+    HTTP_INCS="$HTTP_INCS @XML_CFLAGS@ @OAUTH2_CFLAGS@ $ngx_addon_dir/liboauth2-sts/include"
+    NGX_ADDON_SRCS="$NGX_ADDON_SRCS $ngx_addon_dir/ngx_sts_module.c $ngx_addon_dir/liboauth2-sts/src/sts.c $ngx_addon_dir/liboauth2-sts/src/wstrust.c $ngx_addon_dir/liboauth2-sts/src/ropc.c $ngx_addon_dir/liboauth2-sts/src/otx.c"
+fi
