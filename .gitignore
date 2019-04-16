@@ -19,3 +19,4 @@
 /.libs/
 /ngx_sts_module.la
 /nginx.conf
+/.settings
