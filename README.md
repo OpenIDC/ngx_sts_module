@@ -2,9 +2,63 @@
 
 A security token exchange module for the NGINX web server which allows for exchanging arbitrary security tokens by calling into a remote Security Token Service (STS).
 
+## Quickstart
+
+WS-Trust STS with HTTP Basic authentication and setting the target token in a cookie.
+
+```
+       location /sts/wstrust {
+            STSType wstrust;
+            STSSSLValidateServer Off;
+            STSWSTrustEndpoint https://pingfed:9031/pf/sts.wst;
+            STSWSTrustEndpointAuth basic username=wstrust&password=2Federate;
+            STSWSTrustAppliesTo urn:pingfed;
+            STSWSTrustValueType urn:pingidentity.com:oauth2:grant_type:validate_bearer;
+            STSWSTrustTokenType urn:bogus:token;
+
+            STSVariables $source_token $wst_target_token;
+            
+            proxy_set_header Cookie STS_COOKIE=$wst_target_token;
+            proxy_pass http://echo:8080/headers$is_args$args;
+        }
+```
+
+OAuth 2.0 Resource Owner Password Credentials based Token Exchange with `client_secret_basic` authentication.
+
+```    
+        location /sts/ropc {
+            STSType ropc;
+            STSSSLValidateServer Off;
+            STSROPCEndpoint https://pingfed:9031/as/token.oauth2;
+            STSROPCEndpointAuth client_secret_basic client_id=sts0&client_secret=2Federate;
+            STSROPCUsername dummy;
+            
+            STSVariables $source_token $ropc_target_token;
+            
+            proxy_set_header Cookie STS_COOKIE=$ropc_target_token;
+            proxy_pass http://echo:8080/headers$is_args$args;            
+        }
+```
+
+OAuth 2.0 Token Exchange with `client_secret_basic` authentication.
+
+```
+        location /sts/otx {
+            STSType otx;
+            STSSSLValidateServer Off;
+            STSOTXEndpoint https://keycloak:8443/auth/realms/master/protocol/openid-connect/token;
+            STSOTXEndpointAuth client_secret_basic client_id=otxclient&client_secret=2Federate;
+
+            STSVariables $source_token $otx_target_token;
+            
+            proxy_set_header Cookie STS_COOKIE=$otx_target_token;
+            proxy_pass http://echo:8080/headers$is_args$args;            
+        }        
+```
+
 ## Configuration 
 
-### Source Token Retrieval and Exchange
+### Source Token Retrieval
 
 Cookie:
 ```
@@ -12,7 +66,6 @@ Cookie:
 		default "";
 		"~*MyCookieName=(?<token>[^;]+)" "$token";
 	}
-	sts_handler $sts_source_token $sts_target_token
 ```
 
 Header:
@@ -21,8 +74,6 @@ Header:
 		default "";
 		"~Bearer (?<token>.+)$" "$token";
 	}
-	sts_handler $sts_source_token $sts_target_token
-
 ```
 
 Query:
@@ -30,14 +81,12 @@ Query:
 	if ($args_token != "not found") {
 		$sts_source_token = $args_token
 	}
-	sts_handler $sts_source_token $sts_target_token
 ```
 
 Post:
 ```
 	# use form-input-nginx-module
 	set_form_input $sts_source_token access_token;
-	sts_handler $sts_source_token $sts_target_token
 ```
 	
 ### Source Token Removal
