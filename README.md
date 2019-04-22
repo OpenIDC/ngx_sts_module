@@ -1,6 +1,7 @@
 # ngx_sts_module
 
 A security token exchange module for the NGINX web server which allows for exchanging arbitrary security tokens by calling into a remote Security Token Service (STS).
+For an overview and rationale see the Apache version of this module at https://github.com/zmartzone/mod_sts/blob/master/README.md.
 
 ## Quickstart
 
