@@ -303,7 +303,7 @@ end:
 
 static ngx_int_t ngx_sts_handler(ngx_http_request_t *r)
 {
-	ngx_int_t rv = NGX_ERROR;
+	ngx_int_t rv = NGX_DECLINED;
 	bool rc = false;
 	oauth2_nginx_request_context_t *ctx = NULL;
 	ngx_sts_config *cfg = NULL;
@@ -360,18 +360,15 @@ static ngx_int_t ngx_sts_handler(ngx_http_request_t *r)
 		     target_token ? target_token : "(null)", rc);
 
 	if (rc == false) {
-		if (status_code < 500) {
-			r->headers_out.status = NGX_HTTP_UNAUTHORIZED;
-		} else {
-			r->headers_out.status = (ngx_uint_t)status_code;
-		}
+		r->headers_out.status = (status_code < 500)
+					    ? NGX_HTTP_UNAUTHORIZED
+					    : (ngx_uint_t)status_code;
+		rv = NGX_ERROR;
 		goto end;
 	}
 
-	if (target_token == NULL) {
-		rv = NGX_DONE;
+	if (target_token == NULL)
 		goto end;
-	}
 
 	cfg->target_token.len = strlen(target_token);
 	cfg->target_token.data = ngx_palloc(r->pool, cfg->target_token.len);
