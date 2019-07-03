@@ -303,12 +303,13 @@ end:
 
 static ngx_int_t ngx_sts_handler(ngx_http_request_t *r)
 {
-	ngx_int_t rv = NGX_DECLINED;
+	ngx_int_t rv = NGX_ERROR;
 	bool rc = false;
 	oauth2_nginx_request_context_t *ctx = NULL;
 	ngx_sts_config *cfg = NULL;
 	ngx_str_t ngx_source_token;
 	char *source_token = NULL, *target_token = NULL;
+	oauth2_http_status_code_t status_code = 0;
 
 	if (r != r->main)
 		goto end;
@@ -352,19 +353,32 @@ static ngx_int_t ngx_sts_handler(ngx_http_request_t *r)
 	oauth2_debug(ctx->log, "enter: source_token=%s, initial_request=%d",
 		     source_token, (r != r->main));
 
-	rc = sts_handler(ctx->log, cfg->cfg, source_token, &target_token);
+	rc = sts_handler(ctx->log, cfg->cfg, source_token, &target_token,
+			 &status_code);
 
-	oauth2_debug(ctx->log, "target_token=%s (rc=%d)", target_token, rc);
+	oauth2_debug(ctx->log, "target_token=%s (rc=%d)",
+		     target_token ? target_token : "(null)", rc);
 
-	if (target_token == NULL)
+	if (rc == false) {
+		if (status_code < 500) {
+			r->headers_out.status = NGX_HTTP_UNAUTHORIZED;
+		} else {
+			r->headers_out.status = (ngx_uint_t)status_code;
+		}
 		goto end;
+	}
+
+	if (target_token == NULL) {
+		rv = NGX_DONE;
+		goto end;
+	}
 
 	cfg->target_token.len = strlen(target_token);
 	cfg->target_token.data = ngx_palloc(r->pool, cfg->target_token.len);
 	ngx_memcpy(cfg->target_token.data, (unsigned char *)target_token,
 		   cfg->target_token.len);
 
-	rv = rc ? NGX_OK : NGX_ERROR;
+	rv = NGX_OK;
 
 end:
 

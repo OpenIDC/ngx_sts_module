@@ -1,0 +1,4 @@
+07/03/2019
+- return status code from STS call: if > 500 (504 = gateway timeout)
+- bump liboauth2 dependency to 1.1.1
+- version 3.0.1
