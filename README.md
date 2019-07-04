@@ -73,7 +73,7 @@ Header:
 ```
 	map $http_authorization $sts_source_token {
 		default "";
-		"~Bearer (?<token>.+)$" "$token";
+		"~*^Bearer\s+(?<token>[\S]+)$" $token;
 	}
 ```
 
