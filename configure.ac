@@ -1,4 +1,4 @@
-AC_INIT([ngx_sts_module],[3.0.1],[hans.zandbelt@zmartzone.eu])
+AC_INIT([ngx_sts_module],[3.0.2],[hans.zandbelt@zmartzone.eu])
 
 AM_INIT_AUTOMAKE([foreign no-define subdir-objects])
 AC_CONFIG_MACRO_DIRS([m4])
