@@ -353,7 +353,7 @@ static ngx_int_t ngx_sts_handler(ngx_http_request_t *r)
 	oauth2_debug(ctx->log, "enter: source_token=%s, initial_request=%d",
 		     source_token, (r != r->main));
 
-	rc = sts_handler(ctx->log, cfg->cfg, NULL, source_token, &target_token,
+	rc = sts_handler(ctx->log, cfg->cfg, source_token, NULL, &target_token,
 			 &status_code);
 
 	oauth2_debug(ctx->log, "target_token=%s (rc=%d)",
