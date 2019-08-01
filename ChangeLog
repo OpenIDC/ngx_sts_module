@@ -1,3 +1,7 @@
+08/01/2019
+- oops: fix swapped source token and user params
+- version 3.0.3
+
 07/17/2019
 - update liboauth2-sts to include r->user in sts_handler (not used for NGINX right now)
 - version 3.0.2
