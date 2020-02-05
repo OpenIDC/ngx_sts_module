@@ -31,10 +31,7 @@ OAuth 2.0 Resource Owner Password Credentials based Token Exchange with `client_
 ```nginx
         location /sts/ropc {
             STSType ropc;
-            STSSSLValidateServer Off;
-            STSROPCEndpoint https://pingfed:9031/as/token.oauth2;
-            STSROPCEndpointAuth client_secret_basic client_id=sts0&client_secret=2Federate;
-            STSROPCUsername dummy;
+			STSROPC url=https://pingfed:9031/as/token.oauth2&auth=client_secret_basic&client_id=sts0&client_secret=2Federate&username=dummy&ssl_verify=off;
             
             STSVariables $source_token $ropc_target_token;
             
