@@ -52,10 +52,7 @@ NGINX_STS_FUNC_ARGS(2, wstrust_endpoint_auth)
 NGINX_STS_FUNC_ARGS(1, wstrust_applies_to)
 NGINX_STS_FUNC_ARGS(1, wstrust_token_type)
 NGINX_STS_FUNC_ARGS(1, wstrust_value_type)
-NGINX_STS_FUNC_ARGS(1, ropc_endpoint)
-NGINX_STS_FUNC_ARGS(2, ropc_endpoint_auth)
-NGINX_STS_FUNC_ARGS(1, ropc_client_id)
-NGINX_STS_FUNC_ARGS(1, ropc_username)
+NGINX_STS_FUNC_ARGS(1, ropc)
 NGINX_STS_FUNC_ARGS(1, otx_endpoint)
 NGINX_STS_FUNC_ARGS(2, otx_endpoint_auth)
 NGINX_STS_FUNC_ARGS(1, otx_client_id)
@@ -151,10 +148,7 @@ static ngx_command_t ngx_sts_commands[] = {
 	NGINX_STS_CMD_TAKE( 1, STSWSTrustAppliesTo, wstrust_applies_to),
 	NGINX_STS_CMD_TAKE( 1, STSWSTrustTokenType, wstrust_token_type),
 	NGINX_STS_CMD_TAKE( 1, STSWSTrustValueType, wstrust_value_type),
-	NGINX_STS_CMD_TAKE( 1, STSROPCEndpoint, ropc_endpoint),
-	NGINX_STS_CMD_TAKE(12, STSROPCEndpointAuth, ropc_endpoint_auth),
-	NGINX_STS_CMD_TAKE( 1, STSROPCClientID, ropc_client_id),
-	NGINX_STS_CMD_TAKE( 1, STSROPCUsername, ropc_username),
+	NGINX_STS_CMD_TAKE( 1, STSROPC, ropc),
 	NGINX_STS_CMD_TAKE( 1, STSOTXEndpoint, otx_endpoint),
 	NGINX_STS_CMD_TAKE(12, STSOTXEndpointAuth, otx_endpoint_auth),
 	NGINX_STS_CMD_TAKE( 1, STSOTXClientID, otx_client_id),
