@@ -1,6 +1,7 @@
 11/07/2020
 - depend on liboauth2 >= 1.4.0
 - bump to 3.2.0-dev
+- liboauth2-sts: fix parsing of cache parameters (hardcoded leftover "max_key_size=8")
 
 02/14/2020
 - depend on liboauth 1.2.4 with named cache
