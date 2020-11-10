@@ -44,21 +44,8 @@ typedef struct ngx_sts_config {
 	OAUTH2_NGINX_CFG_FUNC_ARGS##nargs(ngx_sts_config, cfg, sts_cfg,        \
 					  primitive)
 
-NGINX_STS_FUNC_ARGS(1, type)
-NGINX_STS_FUNC_ARGS(1, ssl_validation)
-NGINX_STS_FUNC_ARGS(1, http_timeout)
-NGINX_STS_FUNC_ARGS(1, wstrust_endpoint)
-NGINX_STS_FUNC_ARGS(2, wstrust_endpoint_auth)
-NGINX_STS_FUNC_ARGS(1, wstrust_applies_to)
-NGINX_STS_FUNC_ARGS(1, wstrust_token_type)
-NGINX_STS_FUNC_ARGS(1, wstrust_value_type)
-NGINX_STS_FUNC_ARGS(1, ropc)
-NGINX_STS_FUNC_ARGS(1, otx_endpoint)
-NGINX_STS_FUNC_ARGS(2, otx_endpoint_auth)
-NGINX_STS_FUNC_ARGS(1, otx_client_id)
-NGINX_STS_FUNC_ARGS(1, cache_expiry_s)
+NGINX_STS_FUNC_ARGS(3, exchange)
 NGINX_STS_FUNC_ARGS(2, cache)
-NGINX_STS_FUNC_ARGS(2, request_parameters)
 
 static ngx_int_t ngx_sts_target_token_request_variable(
     ngx_http_request_t *r, ngx_http_variable_value_t *v, uintptr_t data)
@@ -140,21 +127,8 @@ end:
 
 // clang-format off
 static ngx_command_t ngx_sts_commands[] = {
-	NGINX_STS_CMD_TAKE( 1, STSType, type),
-	NGINX_STS_CMD_TAKE( 1, STSSSLValidateServer, ssl_validation),
-	NGINX_STS_CMD_TAKE( 1, STSHTTPTimeOut, http_timeout),
-	NGINX_STS_CMD_TAKE( 1, STSWSTrustEndpoint, wstrust_endpoint),
-	NGINX_STS_CMD_TAKE(12, STSWSTrustEndpointAuth, wstrust_endpoint_auth),
-	NGINX_STS_CMD_TAKE( 1, STSWSTrustAppliesTo, wstrust_applies_to),
-	NGINX_STS_CMD_TAKE( 1, STSWSTrustTokenType, wstrust_token_type),
-	NGINX_STS_CMD_TAKE( 1, STSWSTrustValueType, wstrust_value_type),
-	NGINX_STS_CMD_TAKE( 1, STSROPC, ropc),
-	NGINX_STS_CMD_TAKE( 1, STSOTXEndpoint, otx_endpoint),
-	NGINX_STS_CMD_TAKE(12, STSOTXEndpointAuth, otx_endpoint_auth),
-	NGINX_STS_CMD_TAKE( 1, STSOTXClientID, otx_client_id),
-	NGINX_STS_CMD_TAKE( 1, STSCacheExpiresIn, cache_expiry_s),
 	NGINX_STS_CMD_TAKE(12, STSCache, cache),
-	NGINX_STS_CMD_TAKE(12, STSRequestParameter, request_parameters),
+	NGINX_STS_CMD_TAKE(34, STSExchange, exchange),
 	{
 			// TODO: do this nicer...
 		ngx_string("STSVariables"),
