@@ -40,13 +40,6 @@ typedef struct ngx_sts_config {
 	ngx_str_t target_token;
 } ngx_sts_config;
 
-#define NGINX_STS_FUNC_ARGS(nargs, primitive)                                  \
-	OAUTH2_NGINX_CFG_FUNC_ARGS##nargs(ngx_sts_config, cfg, sts_cfg,        \
-					  primitive)
-
-NGINX_STS_FUNC_ARGS(3, exchange)
-NGINX_STS_FUNC_ARGS(2, cache)
-
 static ngx_int_t ngx_sts_target_token_request_variable(
     ngx_http_request_t *r, ngx_http_variable_value_t *v, uintptr_t data)
 {
@@ -122,11 +115,20 @@ end:
 	return rv;
 }
 
+#define NGINX_STS_FUNC_ARGS(nargs, primitive)                                  \
+	OAUTH2_NGINX_CFG_FUNC_ARGS##nargs(ngx_sts_config, cfg, sts_cfg,        \
+					  primitive)
+
+NGINX_STS_FUNC_ARGS(3, exchange)
+NGINX_STS_FUNC_ARGS(2, cache)
+NGINX_STS_FUNC_ARGS(1, passphrase)
+
 #define NGINX_STS_CMD_TAKE(nargs, primitive, member)                           \
 	OAUTH2_NGINX_CMD_TAKE##nargs(sts_cfg, primitive, member)
 
 // clang-format off
 static ngx_command_t ngx_sts_commands[] = {
+	NGINX_STS_CMD_TAKE(1, STSCryptoPassphrase, passphrase),
 	NGINX_STS_CMD_TAKE(12, STSCache, cache),
 	NGINX_STS_CMD_TAKE(34, STSExchange, exchange),
 	{
