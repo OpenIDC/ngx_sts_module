@@ -38,6 +38,7 @@ typedef struct ngx_sts_config {
 	oauth2_sts_cfg_t *cfg;
 	ngx_http_complex_value_t source_token;
 	ngx_str_t target_token;
+	oauth2_log_t *log;
 } ngx_sts_config;
 
 static ngx_int_t ngx_sts_target_token_request_variable(
@@ -62,8 +63,8 @@ static ngx_int_t ngx_sts_target_token_request_variable(
 	return NGX_OK;
 }
 
-static char *ngx_sts_variables_command(ngx_conf_t *cf, ngx_command_t *cmd,
-				       void *conf)
+static char *ngx_sts_set_variables(ngx_conf_t *cf, ngx_command_t *cmd,
+				   void *conf)
 {
 	char *rv = NGX_CONF_ERROR;
 	// ngx_http_core_loc_conf_t *clcf = NULL;
@@ -115,34 +116,18 @@ end:
 	return rv;
 }
 
-#define NGINX_STS_FUNC_ARGS(nargs, primitive)                                  \
-	OAUTH2_NGINX_CFG_FUNC_ARGS##nargs(ngx_sts_config, cfg, sts_cfg,        \
-					  primitive)
+OAUTH2_NGINX_CFG_FUNC_ARGS1(sts, ngx_sts_config, passphrase,
+			    oauth2_crypto_passphrase_set, NULL)
+OAUTH2_NGINX_CFG_FUNC_ARGS2(sts, ngx_sts_config, cache, oauth2_cfg_set_cache,
+			    NULL)
+OAUTH2_NGINX_CFG_FUNC_ARGS3(sts, ngx_sts_config, exchange, sts_cfg_set_exchange,
+			    cfg->cfg)
 
-NGINX_STS_FUNC_ARGS(3, exchange)
-NGINX_STS_FUNC_ARGS(2, cache)
-NGINX_STS_FUNC_ARGS(1, passphrase)
-
-#define NGINX_STS_CMD_TAKE(nargs, primitive, member)                           \
-	OAUTH2_NGINX_CMD_TAKE##nargs(sts_cfg, primitive, member)
-
-// clang-format off
 static ngx_command_t ngx_sts_commands[] = {
-	NGINX_STS_CMD_TAKE(1, STSCryptoPassphrase, passphrase),
-	NGINX_STS_CMD_TAKE(12, STSCache, cache),
-	NGINX_STS_CMD_TAKE(34, STSExchange, exchange),
-	{
-			// TODO: do this nicer...
-		ngx_string("STSVariables"),
-		NGX_HTTP_LOC_CONF | NGX_CONF_TAKE2,
-		ngx_sts_variables_command,
-		NGX_HTTP_LOC_CONF_OFFSET,
-		0,
-		NULL
-	},
-	ngx_null_command
-};
-// clang-format on
+    OAUTH2_NGINX_CMD(1, sts, STSCryptoPassphrase, passphrase),
+    OAUTH2_NGINX_CMD(12, sts, STSCache, cache),
+    OAUTH2_NGINX_CMD(3 | NGX_CONF_TAKE4, sts, STSExchange, exchange),
+    OAUTH2_NGINX_CMD(2, sts, "STSVariables", variables), ngx_null_command};
 
 static void ngx_sts_cleanup(void *data)
 {
@@ -158,6 +143,7 @@ static void *ngx_sts_create_loc_conf(ngx_conf_t *cf)
 	char path[255];
 
 	conf = ngx_pnalloc(cf->pool, sizeof(ngx_sts_config));
+	conf->log = NULL;
 
 	// TODO: path?
 	sprintf(path, "%p", conf);
