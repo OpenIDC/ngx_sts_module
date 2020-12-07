@@ -331,6 +331,7 @@ static ngx_int_t ngx_sts_handler(ngx_http_request_t *r)
 	ngx_memcpy(cfg->target_token.data, (unsigned char *)target_token,
 		   cfg->target_token.len);
 
+	// TODO: set response, right?
 	rv = NGX_OK;
 
 end:
