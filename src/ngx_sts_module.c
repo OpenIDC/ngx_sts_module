@@ -142,7 +142,7 @@ static void *ngx_sts_create_loc_conf(ngx_conf_t *cf)
 
 	char path[255];
 
-	conf = ngx_pnalloc(cf->pool, sizeof(ngx_sts_config));
+	conf = ngx_pcalloc(cf->pool, sizeof(ngx_sts_config));
 	conf->log = NULL;
 
 	// TODO: path?
