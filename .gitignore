@@ -20,3 +20,6 @@
 /ngx_sts_module.la
 /nginx.conf
 /.settings
+/config.guess~
+/config.sub~
+/configure~
