@@ -316,10 +316,14 @@ static ngx_int_t ngx_sts_handler(ngx_http_request_t *r)
 		     target_token ? target_token : "(null)", rc);
 
 	if (rc == false) {
-		r->headers_out.status = (status_code < 500)
-					    ? NGX_HTTP_UNAUTHORIZED
-					    : (ngx_uint_t)status_code;
-		rv = NGX_ERROR;
+		if ((status_code >= 400) && (status_code < 500)) {
+			r->headers_out.status = (status_code < 500)
+						    ? NGX_HTTP_UNAUTHORIZED
+						    : (ngx_uint_t)status_code;
+			rv = NGX_ERROR;
+		} else {
+			rv = status_code;
+		}
 		goto end;
 	}
 
