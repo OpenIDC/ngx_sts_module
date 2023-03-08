@@ -1,11 +1,11 @@
-[![Build Status](https://github.com/zmartzone/ngx_sts_module/actions/workflows/build.yml/badge.svg)](https://github.com/zmartzone/ngx_sts_module/actions/workflows/build.yml)
+[![Build Status](https://github.com/OpenIDC/ngx_sts_module/actions/workflows/build.yml/badge.svg)](https://github.com/OpenIDC/ngx_sts_module/actions/workflows/build.yml)
 
 # ngx_sts_module
 
 A security token exchange module for the NGINX web server which allows for exchanging arbitrary security
 tokens by calling into a remote Security Token Service (STS).
 For an overview and rationale see the Apache version of this module at:
-https://github.com/zmartzone/mod_sts/blob/master/README.md.
+https://github.com/OpenIDC/mod_sts/blob/master/README.md.
 
 ## Quickstart
 
@@ -156,7 +156,7 @@ Post: pass the target token in a POST parameter to the proxied backend:
 
 #### Community Support
 For generic questions, see the Wiki pages with Frequently Asked Questions at:  
-  [https://github.com/zmartzone/ngx_sts_module/wiki](https://github.com/zmartzone/ngx_sts_module/wiki)  
+  [https://github.com/OpenIDC/ngx_sts_module/wiki](https://github.com/OpenIDC/ngx_sts_module/wiki)  
 Any questions/issues should go to issues tracker.
 
 #### Commercial Services
