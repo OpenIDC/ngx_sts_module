@@ -19,7 +19,7 @@ WS-Trust STS with HTTP Basic authentication and setting the target token in a co
             STSVariables $source_token $wst_target_token;
             
             proxy_set_header Cookie STS_COOKIE=$wst_target_token;
-            proxy_pass http://echo:8080/headers$is_args$args;
+            proxy_pass http://echo:8080$is_args$args;            
         }
 ```
 
@@ -33,7 +33,22 @@ OAuth 2.0 Resource Owner Password Credentials based Token Exchange with `client_
             STSVariables $source_token $ropc_target_token;
             
             proxy_set_header Cookie STS_COOKIE=$ropc_target_token;
-            proxy_pass http://echo:8080/headers$is_args$args;            
+            proxy_pass http://echo:8080$is_args$args;            
+        }
+```
+
+OAuth 2.0 Client Credentials based token retrieval with `client_secret_basic` authentication.
+
+```nginx
+        location /sts/cc {        
+			STSExchange cc https://keycloak:8443/realms/master/protocol/openid-connect/token
+				auth=client_secret_basic&client_id=cc_client&client_secret=mysecret&ssl_verify=false;
+          
+            set $dummy_variable "notempty";
+            STSVariables $dummy_variable $cc_target_token;
+            
+            proxy_set_header Authorization "bearer $cc_target_token";
+            proxy_pass http://echo:8080$is_args$args;            
         }
 ```
 
@@ -47,7 +62,7 @@ OAuth 2.0 Token Exchange with `client_secret_basic` authentication.
             STSVariables $source_token $otx_target_token;
             
             proxy_set_header Cookie STS_COOKIE=$otx_target_token;
-            proxy_pass http://echo:8080/headers$is_args$args;            
+            proxy_pass http://echo:8080$is_args$args;            
         }        
 ```
 
