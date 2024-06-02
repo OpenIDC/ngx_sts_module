@@ -1,3 +1,7 @@
+06/02/2024
+- don't include standard headers before NGINX headers; closes #2 ; thanks @anpin
+  avoid compilation error with NGINX 1.26.0: field 'pkt6' has incomplete type
+
 12/06/2023
 - add support for the client credentials grant type
 - depend on liboauth >= 1.6.0
