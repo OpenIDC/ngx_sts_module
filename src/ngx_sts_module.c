@@ -117,13 +117,13 @@ OAUTH2_NGINX_CFG_FUNC_ARGS1(sts, ngx_sts_config, passphrase,
 			    oauth2_crypto_passphrase_set, NULL)
 OAUTH2_NGINX_CFG_FUNC_ARGS2(sts, ngx_sts_config, cache, oauth2_cfg_set_cache,
 			    NULL)
-OAUTH2_NGINX_CFG_FUNC_ARGS3(sts, ngx_sts_config, exchange, sts_cfg_set_exchange,
+OAUTH2_NGINX_CFG_FUNC_ARGS4(sts, ngx_sts_config, exchange, sts_cfg_set_exchange,
 			    cfg->cfg)
 
 static ngx_command_t ngx_sts_commands[] = {
     OAUTH2_NGINX_CMD(1, sts, STSCryptoPassphrase, passphrase),
     OAUTH2_NGINX_CMD(12, sts, STSCache, cache),
-    OAUTH2_NGINX_CMD(3 | NGX_CONF_TAKE4, sts, STSExchange, exchange),
+    OAUTH2_NGINX_CMD(3 | NGX_CONF_TAKE5, sts, STSExchange, exchange),
     OAUTH2_NGINX_CMD(2, sts, "STSVariables", variables), ngx_null_command};
 
 static void ngx_sts_cleanup(void *data)

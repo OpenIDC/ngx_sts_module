@@ -26,6 +26,7 @@ pkglibdir = $(libdir)/nginx/modules
 	src/liboauth2-sts/src/ropc.c \
 	src/liboauth2-sts/src/cc.c \
 	src/liboauth2-sts/src/otx.c \
+	src/liboauth2-sts/src/jwt.c \
 	src/@PACKAGE_NAME@.c \
 	src/@PACKAGE_NAME@_modules.c
 @PACKAGE_NAME@_la_LDFLAGS = -module
